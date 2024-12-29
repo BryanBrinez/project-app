@@ -10,3 +10,9 @@
 [submodule "users-ms"]
 	path = users-ms
 	url = https://github.com/BryanBrinez/users-ms.git
+[submodule "members-ms"]
+	path = members-ms
+	url = https://github.com/BryanBrinez/members-ms.git
+[submodule "task-ms"]
+	path = task-ms
+	url = https://github.com/BryanBrinez/task-ms.git
