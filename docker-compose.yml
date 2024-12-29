@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+
+  nats-server:
+    image: nats:latest
+    ports:
+      - "8222:8222"
+
+  client-gateway:
+    build: ./client-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client-gateway/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+
+  users-ms:
+    build: ./users-ms
+    volumes:
+      - ./users-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3001
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=postgresql://postgres:123456@users-db:5432/usersdb?schema=public
+
+  users-db:
+    container_name: users_database
+    image: postgres:16.2
+    restart: always
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=usersdb
+
+  auth-ms:
+    build: ./auth-ms
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3003
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=mongodb+srv://datos-tallerII:VElX9GSfcvT6OFWS@cluster1.hlhfqrr.mongodb.net/app-users?retryWrites=true&w=majority
+      - JWT_SECRET=Muysecret
+
+  project-ms:
+      build: ./project-ms
+      volumes:
+        - ./project-ms/src:/usr/src/app/src
+      command: npm run start:dev
+      environment:
+        - PORT=3003
+        - NATS_SERVERS=nats://nats-server:4222
+        - DATABASE_URL=postgresql://postgres:123456@users-db:5432/usersdb?schema=public
+
