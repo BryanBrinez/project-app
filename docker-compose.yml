@@ -82,3 +82,13 @@ services:
         - NATS_SERVERS=nats://nats-server:4222
         - DATABASE_URL=postgresql://postgres:123456@users-db:5432/usersdb?schema=task
 
+  task-chat-ms:
+      build: ./task-chat-ms
+      volumes:
+        - ./task-chat-ms/src:/usr/src/app/src
+      command: npm run start:dev
+      environment:
+        - PORT=3008
+        - NATS_SERVERS=nats://nats-server:4222
+        - DATABASE_URL=postgresql://postgres:123456@users-db:5432/usersdb?schema=task-chat
+
