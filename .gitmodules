@@ -16,3 +16,6 @@
 [submodule "task-ms"]
 	path = task-ms
 	url = https://github.com/BryanBrinez/task-ms.git
+[submodule "task-chat-ms"]
+	path = task-chat-ms
+	url = https://github.com/BryanBrinez/task-chat-ms.git
